@@ -8,7 +8,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "@/apis/auth";
 import { LoginRequest } from "@/interface";
+import { useDispatch } from "react-redux";
+import { login } from "@/redux/slices/authSlice";
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -21,7 +24,7 @@ const Login: React.FC = () => {
       const res = await loginApi(data);
       if (res.onSuccess) {
         alert(res.message);
-        navigate("/");
+        dispatch(login(res.data));
       } else {
         alert(res.message);
       }
@@ -30,7 +33,7 @@ const Login: React.FC = () => {
     }
   };
 
-  const login: FormProp = {
+  const loginForm: FormProp = {
     lable: "Đăng nhập",
     subLable: "Chào mừng bạn đến với REAS - Thiên đường của đồ gia dụng",
     lableButton: "Đăng nhập",
@@ -71,7 +74,7 @@ const Login: React.FC = () => {
       <div className="flex flex-row justify-evenly items-center">
         <img src={LogoREAS} />
         <div className="flex flex-col justify-between rounded-3xl shadow-lg p-10 m-8 min-h-[500px] w-full max-w-xl">
-          <FormCustom prop={login} />
+          <FormCustom prop={loginForm} />
           <LoginWithGg prop={LoginGg} />
         </div>
       </div>
